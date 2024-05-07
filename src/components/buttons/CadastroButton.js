@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const LoginButton = ({ onPress }) => {
+const CadastroButton = ({ onPress }) => {
   return (
     <TouchableOpacity style={styles.button} onPress={onPress}>
-      <Text style={styles.buttonText}>Login</Text>
+      <Text style={styles.buttonText}>Cadastrar</Text>
     </TouchableOpacity>
   );
 };
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginButton;
+export default CadastroButton;

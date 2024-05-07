@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
-import { MyIcon } from "../../utils/icons/Icons";
+import { MyIcon } from "../../icons/Icons";
 
 function EmailInput() {
     const [email, setEmail] = useState("");

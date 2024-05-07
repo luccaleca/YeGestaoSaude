@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { EyeOffIcon, MyIcon } from "../../icons/Icons";
 
-function SenhaInput() {
+function ComfirmarSenhaInput() {
     const [password, setPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
 
@@ -18,7 +18,7 @@ function SenhaInput() {
         <View style={styles.container}>
             <TextInput
                 style={styles.input}
-                placeholder="Digite sua senha"
+                placeholder="Confirme sua senha"
                 value={password}
                 onChangeText={handlePasswordChange}
                 secureTextEntry={hidePassword}
@@ -69,4 +69,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SenhaInput;
+export default ComfirmarSenhaInput;

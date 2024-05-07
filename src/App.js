@@ -1,44 +1,29 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
-import EmailInput from './components/inputs/EmailInput';
-import SenhaInput from './components/inputs/SenhaInput';
-import LoginButton from './components/buttons/LoginButton';
 
+
+import Login from './components/Pages/Login';
+import Cadastro from './components/Pages/Cadastro';
+import Home from './components/Pages/Home';
+
+
+const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.title}>Login</Text>
-        <EmailInput />
-        <SenhaInput />
-        <LoginButton style={styles.loginButton} />  
-      </View>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login}/>
+        <Stack.Screen name="Cadastro" component={Cadastro}/>
+        <Stack.Screen name="Home" component={Home}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    color: 'black',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  loginButton: {
-    marginTop: 50, // Adiciona espaçamento entre o botão e os outros componentes
-  },
-  content: {
-    width: '80%',
-  }
-})
 
 export default App;
