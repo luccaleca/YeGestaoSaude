@@ -13,7 +13,7 @@ const CadastrarText = ({ text, onPress}) => {
         <View style={styles.container}>
             <Text>Você ainda não tem cadastro? </Text>
         <TouchableOpacity onPress={onPress}>
-            <Text style={StyleSheet.link}>Cadastre-se</Text>
+            <Text style={styles.link}>Cadastre-se</Text>
         </TouchableOpacity>
         </View>
     );
@@ -21,7 +21,7 @@ const CadastrarText = ({ text, onPress}) => {
 
 const styles = StyleSheet.create({
     link: {
-        color: 'green',
+        color: 'blue',
         textDecorationLine: 'underline',
     },
     container: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 
 import EmailInput from '../Inputs/EmailInput';
 import SenhaInput from '../Inputs/SenhaInput';
@@ -7,13 +7,13 @@ import LoginButton from '../Buttons/LoginButton';
 
 import CadastrarText from '../TextLink/CadastrarText';
 
+const { width } = Dimensions.get('window');
+
 const Login = ({ navigation }) => {
-  // Função para lidar com o pressionamento do botão login
   const handleLoginPress = () => {
     navigation.navigate('Home');
   };
 
-  // Função para lidar com o pressionamento do botão Cadastre-se
   const handleCadastroPress = () => {
     navigation.navigate('Cadastro');
   };
@@ -21,19 +21,25 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
-      <EmailInput />
-      <SenhaInput />
-      {/* Passa a função handleCadastroPress como prop onPress para o componente CadastrarText */}
-      <CadastrarText onPress={handleCadastroPress} />
-      {/* Passa a função handleLoginPress como prop onPress para o componente LoginButton */}
-      <LoginButton onPress={handleLoginPress} />
+      <View style={styles.inputsContainer}>
+        <EmailInput style={styles.input} />
+        <SenhaInput style={styles.input} />
+      </View>
+      <View style={styles.buttonsContainer}>
+        <LoginButton onPress={handleLoginPress} />
+        <View style={styles.cadastrarContainer}>
+          <CadastrarText onPress={handleCadastroPress} />
+        </View>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'green',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
     fontSize: 24,
@@ -41,6 +47,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
+  },
+  inputsContainer: {
+    width: width * 0.8,
+    marginBottom: 20,
+  },
+  input: {
+    // Adicione estilos adicionais para os inputs, se necessário
+  },
+  buttonsContainer: {
+    width: width * 0.8,
+  },
+  cadastrarContainer: {
+    marginTop: 10, // Ajusta a distância entre o texto "Cadastrar-se" e o botão de login
   },
 });
 
