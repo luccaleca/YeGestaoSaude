@@ -13,6 +13,7 @@ import TermosDeServico from './components/Pages/TermosDeServico';
 import Consultas from './components/Pages/Agenda'
 import SideBar from './components/SideBar';
 import Agenda from './components/Pages/Agenda';
+import CriarAgendamento from './components/Pages/CriarAgendamento';
 
 
 const Stack = createNativeStackNavigator()
@@ -27,6 +28,7 @@ const App = () => {
         <Stack.Screen name="Políticas De Privacidade" component={PoliticaDePrivacidade} />
         <Stack.Screen name="Termos De Servico" component={TermosDeServico} />
         <Stack.Screen name="Agenda" component={Agenda} />
+        <Stack.Screen name="CriarAgendamento" component={CriarAgendamento} />
       </Stack.Navigator>
     </NavigationContainer>
   );
