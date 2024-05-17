@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import SideBar from '../SideBar';
 
-const Home = () => {
+const Menu = () => {
   return (
     <View style={styles.container}>
-      <Text>Home</Text>
+      <Text>Menu</Text>
       <SideBar />
     </View>
   );
@@ -14,8 +14,7 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor:"orange"
   },
 });
 
-export default Home;
+export default Menu;

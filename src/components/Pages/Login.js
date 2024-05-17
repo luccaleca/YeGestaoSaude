@@ -11,7 +11,7 @@ const { width } = Dimensions.get('window');
 
 const Login = ({ navigation }) => {
   const handleLoginPress = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Menu');
   };
 
   const handleCadastroPress = () => {

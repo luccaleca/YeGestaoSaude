@@ -4,45 +4,46 @@ import { Calendar, Home, Files, User } from '../icons/Icons';
 import { useNavigation } from '@react-navigation/native';
 
 const SideBar = () => {
-    const navigation = useNavigation();
-    
+  const navigation = useNavigation();
 
-    const handleConsultasPress = () => {
-        navigation.navigate('Agenda')
-    }
+  const handleMenuPress = () => {
+    navigation.navigate('Menu');
+  };
+
+  const handleConsultasPress = () => {
+    navigation.navigate('Agenda');
+  };
+
+  const handleDocumentsPress = () => {
+    navigation.navigate('Documentos');
+  };
+  
+  const handleUserPress = () => {
+    navigation.navigate('Perfil');
+  };
+
   return (
     <View style={styles.container}>
       {/* Primeira parte da barra lateral */}
-      
-      <View style={styles.item}>
-
+      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Menu')}>
         <Home />
-        <Text>Menu</Text> 
-
-      </View>
+        <Text>Menu</Text>
+      </TouchableOpacity>
       {/* Segunda parte da barra lateral */}
-      <View style={styles.item}>
       <TouchableOpacity style={styles.item} onPress={handleConsultasPress}>
-      <Calendar />
-      <Text>Agenda</Text>
-        </TouchableOpacity>
-      
-
-      </View>
+        <Calendar />
+        <Text>Agenda</Text>
+      </TouchableOpacity>
       {/* Terceira parte da barra lateral */}
-      <View style={styles.item}>
-
+      <TouchableOpacity style={styles.item} onPress={handleDocumentsPress}>
         <Files />
         <Text>Documentos</Text>
-        {/* Adicione seus ícones aqui */}
-      </View>
+      </TouchableOpacity>
       {/* Quarta parte da barra lateral */}
-      <View style={styles.item}>
-
+      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('User')}>
         <User />
-        <Text>User</Text>
-
-      </View>
+        <Text>Perfil</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
     position: 'absolute', // Fixa a barra lateral na parte inferior
     bottom: 0, // Alinha a barra lateral na parte inferior
     width: '100%', // Ocupa toda a largura da tela
-    backgroundColor: "green",
   },
   item: {
     flex: 1, // Cada item ocupa uma parte igual da largura disponível
@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center', // Centraliza os ícones verticalmente
     backgroundColor: '#eee', // Cor de fundo dos itens
     height: 50, // Altura dos itens (pode ser ajustada conforme necessário)
+  },
+  itemText: {
+    fontSize: 12, // Ajuste o tamanho do texto conforme necessário
   },
 });
 
