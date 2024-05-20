@@ -2,11 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import SideBar from '../Bars/SideBar';
 
-const Menu = () => {
+const Medicamentos = () => {
   return (
     <View style={styles.container}>
-      <Text>Menu</Text>
-      <SideBar />
+      <Text>Medicamentos</Text>
     </View>
   );
 };
@@ -17,4 +16,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Menu;
+export default Medicamentos;

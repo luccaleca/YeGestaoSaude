@@ -1,10 +1,9 @@
+import { useNavigation } from '@react-navigation/native'; // Importe os componentes necessários do React Navigation
 import React from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
-import { NavigationContainer, useNavigation } from '@react-navigation/native'; // Importe os componentes necessários do React Navigation
-import SideBar from '../SideBar';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Bell, Plus } from '../../icons/Icons';
 import CategoriaDeAgendamento from '../Agendamento/CategoriaDeAgendamento';
-import { Plus, Bell } from '../../icons/Icons';
-import CriarAgendamento from './CriarAgendamento';
+import SideBar from '../Bars/SideBar';
 
 const Agendamento = () => {
   const navigation = useNavigation(); // Obtenha o objeto de navegação usando useNavigation()

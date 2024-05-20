@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import SideBar from '../Bars/SideBar';
 import AddDocumentosButton from '../Buttons/AddDocumentosButton';
 
-const Documentos = () => {
+const DocumentoIdentidade = () => {
   return (
     <View style={styles.container}>
       <Image
@@ -34,4 +34,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Documentos;
+export default DocumentoIdentidade;

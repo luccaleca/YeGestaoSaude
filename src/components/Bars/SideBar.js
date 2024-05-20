@@ -1,7 +1,7 @@
-import React from 'react';
-import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { Calendar, Home, Files, User } from '../icons/Icons';
 import { useNavigation } from '@react-navigation/native';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Calendar, Files, Home, User } from '../../icons/Icons';
 
 const SideBar = () => {
   const navigation = useNavigation();
@@ -25,7 +25,7 @@ const SideBar = () => {
   return (
     <View style={styles.container}>
       {/* Primeira parte da barra lateral */}
-      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('Menu')}>
+      <TouchableOpacity style={styles.item} onPress={handleMenuPress}>
         <Home />
         <Text>Menu</Text>
       </TouchableOpacity>
@@ -40,7 +40,7 @@ const SideBar = () => {
         <Text>Documentos</Text>
       </TouchableOpacity>
       {/* Quarta parte da barra lateral */}
-      <TouchableOpacity style={styles.item} onPress={() => navigation.navigate('User')}>
+      <TouchableOpacity style={styles.item} onPress={handleUserPress}>
         <User />
         <Text>Perfil</Text>
       </TouchableOpacity>

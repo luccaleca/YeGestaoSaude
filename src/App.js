@@ -1,21 +1,25 @@
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
 
 
 
-import Login from './components/Pages/Login';
+import Agenda from './components/Pages/Agenda';
 import Cadastro from './components/Pages/Cadastro';
+import CriarAgendamento from './components/Pages/CriarAgendamento';
+import Documentos from './components/Pages/Documentos';
+import Login from './components/Pages/Login';
 import Menu from './components/Pages/Menu';
 import PoliticaDePrivacidade from './components/Pages/PoliticaDePrivacidade';
 import TermosDeServico from './components/Pages/TermosDeServico';
-import Consultas from './components/Pages/Agenda'
-import SideBar from './components/SideBar';
-import Agenda from './components/Pages/Agenda';
-import CriarAgendamento from './components/Pages/CriarAgendamento';
-import Documentos from './components/Pages/Documentos';
+
+
 import Perfil from './components/Pages/Perfil';
+import DadosPessoais from './components/Pages/DadosPessoais';
+import DocumentoIdentidade from './components/Pages/DocumentoIdentidade';
+import HistoricoMedico from './components/Pages/HistoricoMedico';
+import Medicamentos from './components/Pages/Medicamentos';
+
 
 
 const Stack = createNativeStackNavigator()
@@ -33,6 +37,10 @@ const App = () => {
         <Stack.Screen name="CriarAgendamento" component={CriarAgendamento} />
         <Stack.Screen name="Documentos" component={Documentos} />
         <Stack.Screen name="Perfil" component={Perfil} />
+        <Stack.Screen name="DadosPessoais" component={DadosPessoais} />
+        <Stack.Screen name="DocumentoIdentidade" component={DocumentoIdentidade} />
+        <Stack.Screen name="HistoricoMedico" component={HistoricoMedico} />
+        <Stack.Screen name="Medicamentos" component={Medicamentos} />
       </Stack.Navigator>
     </NavigationContainer>
   );
