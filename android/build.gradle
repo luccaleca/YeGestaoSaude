@@ -10,6 +10,8 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        // Adicione o repositório do Gradle Plugin Portal
+        gradlePluginPortal()
     }
     dependencies {
         classpath("com.android.tools.build:gradle")
@@ -18,6 +20,9 @@ buildscript {
         classpath("com.google.gms:google-services:4.4.1") // Adicione esta linha
     }
 }
+
+
+
 
 apply plugin: "com.facebook.react.rootproject"
 

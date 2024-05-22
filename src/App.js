@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
 
-
+import Inicial from './components/Pages/Inicial';
 import Agenda from './components/Pages/Agenda';
 import Cadastro from './components/Pages/Cadastro';
 import CriarAgendamento from './components/Pages/CriarAgendamento';
@@ -22,12 +22,15 @@ import Medicamentos from './components/Pages/Medicamentos';
 
 
 
+
+
 const Stack = createNativeStackNavigator()
 
 const App = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Inicial">
+      <Stack.Screen name="Inicial" component={Inicial}/>
         <Stack.Screen name="Login" component={Login}/>
         <Stack.Screen name="Cadastro" component={Cadastro}/>
         <Stack.Screen name="Menu" component={Menu}/>
