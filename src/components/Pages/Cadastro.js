@@ -11,8 +11,6 @@ import TermosServico from '../TextLink/TermosServicoPrivacidade';
 
 const { width } = Dimensions.get('window');
 
-import { registerUser } from '../../../backend/registerUser';
-
 const Cadastro = ({ navigation }) => {
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
@@ -25,15 +23,6 @@ const Cadastro = ({ navigation }) => {
     if (password !== confirmPassword) {
       setErrorMessage('As senhas não coincidem');
       return;
-    }
-
-    try {
-      await registerUser(nome, email, password);
-      setModalVisible(true);
-    } catch (error) {
-      const errorMessage = error.message;
-      console.error('Erro ao registrar usuário:', errorMessage);
-      setErrorMessage(errorMessage);
     }
   };
 

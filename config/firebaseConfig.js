@@ -1,6 +1,8 @@
 // firebaseConfig.js
 import { initializeApp } from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAIKw7MmFNiWBHudRopK_5ubBEtydAdIxY",
@@ -15,7 +17,9 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Using auth without passing app should use the default Firebase app
+// Using auth, firestore, and storage without passing app should use the default Firebase app
 const firebaseAuth = auth();
+const firebaseFirestore = firestore();
+const firebaseStorage = storage();
 
-export { firebaseAuth };
+export { firebaseAuth, firebaseFirestore, firebaseStorage };
