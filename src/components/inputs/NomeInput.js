@@ -20,10 +20,10 @@ function NameInput() {
                 autoCapitalize="none"
                 autoCompleteType="name"
                 autoCorrect={false}
-            /> 
-            <View style={ styles.iconContainer}>   
-                <MyIcon style={styles.myIcon} /> 
-            </View>  
+            />
+            <View style={styles.iconContainer}>
+                <MyIcon style={styles.myIcon} />
+            </View>
         </View>
     );
 }
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "black",
         paddingLeft: 40,
-        borderRadius: 5, 
+        borderRadius: 5,
         paddingHorizontal: 10,
     },
     iconContainer: {

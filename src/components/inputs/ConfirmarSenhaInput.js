@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { EyeOffIcon, MyIcon } from "../../icons/Icons";
 
-function ComfirmarSenhaInput() {
+const ConfirmarSenhaInput = ({ setConfirmPassword }) => {
     const [password, setPassword] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
 
     const handlePasswordChange = (text) => {
         setPassword(text);
+        setConfirmPassword(text);  // Atualiza a senha de confirmação no estado do componente pai
     };
 
     const togglePasswordVisibility = () => {
@@ -69,4 +70,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ComfirmarSenhaInput;
+export default ConfirmarSenhaInput;

@@ -12,7 +12,7 @@ const Inicial = () => {
     <View style={styles.container}>
       <Image source={require('../../../assets/images/LogoInvertido.png')} style={styles.logo} />
       <Text style={styles.title}>Vamos começar</Text>
-      <Text style={styles.subtitle}>Faça o cadastro e aproveite todas as funcionalidades que temos, e fique com saúde</Text>
+      <Text style={styles.subtitle}>Faça o cadastro e aproveite todas as funcionalidades, e fique com saúde.</Text>
       <IrLoginButton />
       <IrCadastroButton/>
     </View>

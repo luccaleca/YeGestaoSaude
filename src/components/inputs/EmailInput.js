@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { MyIcon } from "../../icons/Icons";
 
-function EmailInput() {
-    const [email, setEmail] = useState("");
+function EmailInput(props) {
+    const [email, setEmailState] = useState("");
 
     const handleEmailChange = (text) => {
-        setEmail(text);
+        setEmailState(text);
+        props.setEmail(text);  // Atualiza o estado no componente pai
     };
 
     return (
@@ -20,10 +21,10 @@ function EmailInput() {
                 autoCapitalize="none"
                 autoCompleteType="email"
                 autoCorrect={false}
-            /> 
-            <View style={ styles.iconContainer}>   
-                <MyIcon style={styles.myIcon} /> 
-            </View>  
+            />
+            <View style={styles.iconContainer}>
+                <MyIcon style={styles.myIcon} />
+            </View>
         </View>
     );
 }
@@ -36,7 +37,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "black",
         paddingLeft: 40,
-        borderRadius: 5, 
+        borderRadius: 5,
         paddingHorizontal: 10,
     },
     iconContainer: {

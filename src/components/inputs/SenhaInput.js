@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { EyeOffIcon, MyIcon } from "../../icons/Icons";
 
-function SenhaInput() {
-    const [password, setPassword] = useState("");
+function SenhaInput({ setPassword }) {
+    const [password, setPasswordState] = useState("");
     const [hidePassword, setHidePassword] = useState(true);
 
     const handlePasswordChange = (text) => {
-        setPassword(text);
+        setPasswordState(text);
+        setPassword(text);  // Atualiza o estado no componente pai
     };
 
     const togglePasswordVisibility = () => {
@@ -26,12 +27,12 @@ function SenhaInput() {
                 autoCompleteType="password"
                 autoCorrect={false}
             />
-            <View style={styles.iconContainer}>   
-                <MyIcon style={styles.myIcon} /> 
+            <View style={styles.iconContainer}>
+                <MyIcon style={styles.myIcon} />
             </View>
-            <TouchableOpacity style={styles.iconSenhaContainer} onPress={togglePasswordVisibility}>   
-               {hidePassword ? <MyIcon style={styles.myIcon} /> : <EyeOffIcon style={styles.myIcon} />} 
-            </TouchableOpacity>  
+            <TouchableOpacity style={styles.iconSenhaContainer} onPress={togglePasswordVisibility}>
+                {hidePassword ? <MyIcon style={styles.myIcon} /> : <EyeOffIcon style={styles.myIcon} />}
+            </TouchableOpacity>
         </View>
     );
 }
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "black",
         paddingLeft: 40,
-        borderRadius: 5, 
+        borderRadius: 5,
         paddingHorizontal: 10,
     },
     iconContainer: {
