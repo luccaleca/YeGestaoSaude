@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, ScrollView } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { firebaseAuth } from '../../../config/firebaseConfig';
+import { addUserData } from '../../../config/firebaseDadosUsuarios';
+import SaveButton from '../Buttons/SaveButton'; 
 
 const HistoricoMedico = () => {
   const [bloodPressure, setBloodPressure] = useState('');
@@ -9,6 +12,26 @@ const HistoricoMedico = () => {
   const [familyDiseases, setFamilyDiseases] = useState('');
   const [allergies, setAllergies] = useState('');
   const [otherNotes, setOtherNotes] = useState('');
+
+  const handleSave = async () => {
+    const userId = firebaseAuth.currentUser.uid;
+    const historicoMedico = {
+      afericaoPressao: bloodPressure,
+      glicemia: glucoseLevel,
+      imc: bmi,
+      doencasPassadasCronicas: medicalHistory,
+      doencasFamiliares: familyDiseases,
+      alergias: allergies,
+      outrasNotas: otherNotes,
+    };
+
+    try {
+      await addUserData(userId, {}, historicoMedico, {}, []);
+      console.log('Histórico médico adicionado com sucesso');
+    } catch (error) {
+      console.error('Erro ao adicionar histórico médico:', error);
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -46,7 +69,6 @@ const HistoricoMedico = () => {
       />
       <Text>Exemplo: estou há duas semanas com dores no estômago</Text>
 
-      {/* Input para doenças graves em família */}
       <TextInput
         style={[styles.input, { height: 100 }]}
         placeholder="Doenças Graves em sua Família"
@@ -58,7 +80,6 @@ const HistoricoMedico = () => {
       />
       <Text>Exemplo: minha avó teve câncer de mama e meu pai é diabético.</Text>
 
-      {/* Input para alergias */}
       <TextInput
         style={[styles.input, { height: 100 }]}
         placeholder="Alergias"
@@ -70,7 +91,6 @@ const HistoricoMedico = () => {
       />
       <Text>Exemplo: sou alérgico a penicilina e poeira.</Text>
 
-      {/* Input para outras notas */}
       <TextInput
         style={[styles.input, { height: 100 }]}
         placeholder="Outras Notas"
@@ -81,6 +101,8 @@ const HistoricoMedico = () => {
         textAlignVertical="top"
       />
       <Text>Exemplo: há dois meses comecei a fazer jejum intermitente.</Text>
+
+      <SaveButton onPress={handleSave} />
     </ScrollView>
   );
 };

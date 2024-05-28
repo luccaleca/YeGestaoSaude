@@ -1,4 +1,4 @@
-import { firebaseFirestore } from '../config/firebaseConfig';
+import { firebaseFirestore } from './firebaseConfig';
 
 const addUserData = async (userId, dadosPessoais, historicoMedico, medicamentos, agendamentos) => {
   try {

@@ -1,14 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
+import SaveButton from '../Buttons/SaveButton';
 
 const DadosPessoais = () => {
   const [fullName, setFullName] = useState('');
   const [birthDate, setBirthDate] = useState('');
   const [height, setHeight] = useState('');
-  const [bloodType, setBloodType] = useState('');
   const [weight, setWeight] = useState('');
   const [address, setAddress] = useState('');
   const [cep, setCep] = useState('');
+  const [bloodType, setBloodType] = useState('');
+
+  const userId = firebaseAuth.currentUser?.uid;
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const doc = await firebaseFirestore.collection('usuarios').doc(userId).collection('dados_pessoais').doc('info').get();
+        if (doc.exists) {
+          const data = doc.data();
+          setFullName(data.nomeCompleto || '');
+          setBirthDate(data.dataNascimento || '');
+          setHeight(data.altura || '');
+          setWeight(data.peso || '');
+          setAddress(data.enderecoCompleto || '');
+          setCep(data.cep || '');
+          setBloodType(data.tipoSanguineo || '');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados pessoais:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
+
+  const handleSave = async () => {
+    const dadosPessoais = {
+      nomeCompleto: fullName,
+      dataNascimento: birthDate,
+      altura: height,
+      peso: weight,
+      enderecoCompleto: address,
+      cep: cep,
+      tipoSanguineo: bloodType,
+    };
+
+    try {
+      await firebaseFirestore.collection('usuarios').doc(userId).collection('dados_pessoais').doc('info').set(dadosPessoais);
+      console.log('Dados pessoais adicionados com sucesso');
+    } catch (error) {
+      console.error('Erro ao adicionar dados pessoais:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -62,6 +107,7 @@ const DadosPessoais = () => {
         onChangeText={setBloodType}
         keyboardType="default"
       />
+      <SaveButton onPress={handleSave} />
     </View>
   );
 };
