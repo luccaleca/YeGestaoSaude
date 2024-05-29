@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput } from 'react-native';
-import { firebaseAuth } from '../../../config/firebaseConfig';
-import { addUserData } from '../../../config/firebaseDadosUsuarios';
-import SaveButton from '../Buttons/SaveButton'; 
+import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
+import inserirHistoricoMedico from '../../../config/Inserir/InserirHistorico_medico'; // Importe a função inserirHistoricoMedico
+import SaveButton from '../Buttons/SaveButton';
 
 const HistoricoMedico = () => {
   const [bloodPressure, setBloodPressure] = useState('');
@@ -13,8 +13,33 @@ const HistoricoMedico = () => {
   const [allergies, setAllergies] = useState('');
   const [otherNotes, setOtherNotes] = useState('');
 
+  const userId = firebaseAuth.currentUser?.uid;
+
+  useEffect(() => {
+    const fetchHistoricoMedico = async () => {
+      try {
+        const doc = await firebaseFirestore.collection('usuarios').doc(userId).collection('historico_medico').doc('info').get();
+        if (doc.exists) {
+          const data = doc.data();
+          setBloodPressure(data.afericaoPressao || '');
+          setGlucoseLevel(data.glicemia || '');
+          setBmi(data.imc || '');
+          setMedicalHistory(data.doencasPassadasCronicas || '');
+          setFamilyDiseases(data.doencasFamiliares || '');
+          setAllergies(data.alergias || '');
+          setOtherNotes(data.outrasNotas || '');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar histórico médico:', error);
+      }
+    };
+
+    if (userId) {
+      fetchHistoricoMedico();
+    }
+  }, [userId]);
+
   const handleSave = async () => {
-    const userId = firebaseAuth.currentUser.uid;
     const historicoMedico = {
       afericaoPressao: bloodPressure,
       glicemia: glucoseLevel,
@@ -26,7 +51,7 @@ const HistoricoMedico = () => {
     };
 
     try {
-      await addUserData(userId, {}, historicoMedico, {}, []);
+      await inserirHistoricoMedico(userId, historicoMedico); // Chame a função inserirHistoricoMedico com os dados do usuário
       console.log('Histórico médico adicionado com sucesso');
     } catch (error) {
       console.error('Erro ao adicionar histórico médico:', error);

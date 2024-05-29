@@ -1,54 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput } from 'react-native';
 import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
+import inserirDadosPessoais from '../../../config/Inserir/InserirDados_Pessoais'; // Importe a função inserirDadosPessoais
 import SaveButton from '../Buttons/SaveButton';
 
 const DadosPessoais = () => {
-  const [fullName, setFullName] = useState('');
-  const [birthDate, setBirthDate] = useState('');
-  const [height, setHeight] = useState('');
-  const [weight, setWeight] = useState('');
-  const [address, setAddress] = useState('');
-  const [cep, setCep] = useState('');
-  const [bloodType, setBloodType] = useState('');
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [dataNascimento, setDataNascimento] = useState('');
+  const [sexo, setSexo] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [tipoSanguineo, setTipoSanguineo] = useState('');
 
   const userId = firebaseAuth.currentUser?.uid;
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchDadosPessoais = async () => {
       try {
         const doc = await firebaseFirestore.collection('usuarios').doc(userId).collection('dados_pessoais').doc('info').get();
         if (doc.exists) {
           const data = doc.data();
-          setFullName(data.nomeCompleto || '');
-          setBirthDate(data.dataNascimento || '');
-          setHeight(data.altura || '');
-          setWeight(data.peso || '');
-          setAddress(data.enderecoCompleto || '');
-          setCep(data.cep || '');
-          setBloodType(data.tipoSanguineo || '');
+          setNome(data.nome || '');
+          setEmail(data.email || '');
+          setDataNascimento(data.dataNascimento || '');
+          setSexo(data.sexo || '');
+          setEndereco(data.endereco || '');
+          setTelefone(data.telefone || '');
+          setTipoSanguineo(data.tipoSanguineo || '');
         }
       } catch (error) {
         console.error('Erro ao buscar dados pessoais:', error);
       }
     };
 
-    fetchUserData();
+    if (userId) {
+      fetchDadosPessoais();
+    }
   }, [userId]);
 
   const handleSave = async () => {
     const dadosPessoais = {
-      nomeCompleto: fullName,
-      dataNascimento: birthDate,
-      altura: height,
-      peso: weight,
-      enderecoCompleto: address,
-      cep: cep,
-      tipoSanguineo: bloodType,
+      nome,
+      email,
+      dataNascimento,
+      sexo,
+      endereco,
+      telefone,
+      tipoSanguineo,
     };
 
     try {
-      await firebaseFirestore.collection('usuarios').doc(userId).collection('dados_pessoais').doc('info').set(dadosPessoais);
+      await inserirDadosPessoais(userId, dadosPessoais); // Chame a função inserirDadosPessoais com os dados do usuário
       console.log('Dados pessoais adicionados com sucesso');
     } catch (error) {
       console.error('Erro ao adicionar dados pessoais:', error);
@@ -56,65 +59,65 @@ const DadosPessoais = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Dados Pessoais</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nome Completo"
-        value={fullName}
-        onChangeText={setFullName}
+        placeholder="Nome"
+        value={nome}
+        onChangeText={setNome}
         keyboardType="default"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
         placeholder="Data de Nascimento"
-        value={birthDate}
-        onChangeText={setBirthDate}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Altura (cm)"
-        value={height}
-        onChangeText={setHeight}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Peso (kg)"
-        value={weight}
-        onChangeText={setWeight}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Endereço Completo"
-        value={address}
-        onChangeText={setAddress}
+        value={dataNascimento}
+        onChangeText={setDataNascimento}
         keyboardType="default"
       />
       <TextInput
         style={styles.input}
-        placeholder="CEP"
-        value={cep}
-        onChangeText={setCep}
-        keyboardType="numeric"
+        placeholder="Sexo"
+        value={sexo}
+        onChangeText={setSexo}
+        keyboardType="default"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Endereço"
+        value={endereco}
+        onChangeText={setEndereco}
+        keyboardType="default"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Telefone"
+        value={telefone}
+        onChangeText={setTelefone}
+        keyboardType="phone-pad"
       />
       <TextInput
         style={styles.input}
         placeholder="Tipo Sanguíneo"
-        value={bloodType}
-        onChangeText={setBloodType}
+        value={tipoSanguineo}
+        onChangeText={setTipoSanguineo}
         keyboardType="default"
       />
+
       <SaveButton onPress={handleSave} />
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
     backgroundColor: '#fff',
   },
