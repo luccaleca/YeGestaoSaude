@@ -6,7 +6,10 @@ import React from 'react';
 import Inicial from './components/Pages/Inicial';
 import Agenda from './components/Pages/Agenda';
 import Cadastro from './components/Pages/Cadastro';
+
 import CriarAgendamento from './components/Pages/CriarAgendamento';
+import EditarAgendamento from './components/Pages/EditarAgendamento';
+
 import Documentos from './components/Pages/Documentos';
 import Login from './components/Pages/Login';
 import Menu from './components/Pages/Menu';
@@ -44,6 +47,7 @@ const App = () => {
         <Stack.Screen name="DocumentoIdentidade" component={DocumentoIdentidade} />
         <Stack.Screen name="HistoricoMedico" component={HistoricoMedico} />
         <Stack.Screen name="Medicamentos" component={Medicamentos} />
+        <Stack.Screen name="EditarAgendamento" component={EditarAgendamento} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,19 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput } from 'react-native';
+import React from "react";
+import { StyleSheet, TextInput, View } from "react-native";
 
-const RazaoInput = () => {
-  const [reason, setReason] = useState('');
-
+const RazaoInput = ({ value, onChangeText }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.label}>Escreva a razão da consulta:</Text>
       <TextInput
         style={styles.input}
-        multiline
-        numberOfLines={4}
-        onChangeText={setReason}
-        value={reason}
-        placeholder="motivo da consulta"
+        placeholder="Digite a razão do exame"
+        value={value}
+        onChangeText={onChangeText}
+        keyboardType="default"
+        autoCapitalize="none"
+        autoCorrect={false}
       />
     </View>
   );
@@ -23,18 +21,12 @@ const styles = StyleSheet.create({
   container: {
     marginVertical: 10,
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
   input: {
-    height: 100,
+    height: 40,
     borderWidth: 1,
-    borderColor: 'black',
+    borderColor: "black",
     borderRadius: 5,
     paddingHorizontal: 10,
-    paddingVertical: 10,
-    textAlignVertical: 'top', // Ensures text starts at the top in Android
   },
 });
 

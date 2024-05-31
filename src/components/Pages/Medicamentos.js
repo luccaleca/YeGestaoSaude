@@ -45,7 +45,7 @@ const Medicamentos = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Medicamentos</Text>
-      <Text>Os medicamentos que você faz uso e sua reação são muito importantes para o especialista.</Text>
+      <Text>Faz uso atualmente</Text>
       <TextInput
         style={[styles.input, styles.wideInput]}
         placeholder="Medicamentos que faz uso atualmente"
@@ -55,7 +55,7 @@ const Medicamentos = () => {
         multiline
         textAlignVertical="top"
       />
-      <Text>Exemplo: diariamente eu tomo medicação para pressão alta.</Text>
+      <Text>Fez uso no passado</Text>
       <TextInput
         style={[styles.input, styles.wideInput]}
         placeholder="Medicamentos utilizados no passado"
@@ -65,7 +65,6 @@ const Medicamentos = () => {
         multiline
         textAlignVertical="top"
       />
-      <Text>Exemplo: eu tomei antibióticos</Text>
 
       <SaveButton onPress={handleSave} />
     </View>

@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-const DateInput = () => {
-  const [date, setDate] = useState(new Date());
+const DateInput = ({ value, onChange }) => {
 
   const showDatePicker = () => {
     DateTimePickerAndroid.open({
-      value: date,
+      value: value || new Date(),
       onChange: (event, selectedDate) => {
         if (selectedDate) {
-          setDate(selectedDate);
+          onChange(selectedDate);
         }
       },
       mode: 'date',
@@ -29,7 +28,7 @@ const DateInput = () => {
     <View style={styles.container}>
       <Text style={styles.label}>Selecione a data:</Text>
       <TouchableOpacity onPress={showDatePicker} style={styles.input}>
-        <Text>{formatDate(date)}</Text>
+        <Text>{formatDate(value)}</Text>
       </TouchableOpacity>
     </View>
   );

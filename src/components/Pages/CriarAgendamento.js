@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View } from 'react-native';
+import { View, TextInput, StyleSheet, Text } from 'react-native';
 import Especialidade from '../Inputs/Especialidade';
 import NomeEspecialista from '../Inputs/NomeEspecialista';
 import DateInput from '../Inputs/DateInput';
@@ -12,9 +12,10 @@ import { firebaseAuth } from '../../../config/firebaseConfig';
 const CriarAgendamento = () => {
   const [nomeEspecialista, setNomeEspecialista] = useState('');
   const [especialidade, setEspecialidade] = useState('');
-  const [data, setData] = useState('');
-  const [horario, setHorario] = useState('');
+  const [data, setData] = useState(new Date());
+  const [horario, setHorario] = useState(new Date());
   const [razao, setRazao] = useState('');
+  const [retorno, setRetorno] = useState('');
 
   const handleMarcarExame = async () => {
     const userId = firebaseAuth.currentUser?.uid;
@@ -27,9 +28,10 @@ const CriarAgendamento = () => {
       userId,
       nomeEspecialista,
       especialidade,
-      data,
-      horario,
+      data: data.toISOString().split('T')[0], // Converting Date to String (YYYY-MM-DD)
+      horario: horario.toTimeString().split(' ')[0], // Converting Time to String (HH:MM:SS)
       razao,
+      retorno,
     };
 
     try {
@@ -41,16 +43,45 @@ const CriarAgendamento = () => {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <NomeEspecialista value={nomeEspecialista} onChangeText={setNomeEspecialista} />
       <Especialidade value={especialidade} onChangeText={setEspecialidade} />
       <DateInput value={data} onChange={setData} />
       <TimeInput value={horario} onChange={setHorario} />
       <RazaoInput value={razao} onChangeText={setRazao} />
-
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Retorno:</Text>
+        <TextInput
+          style={styles.input}
+          value={retorno}
+          onChangeText={setRetorno}
+          placeholder="Informe o retorno"
+        />
+      </View>
       <MarcarExameButton onPress={handleMarcarExame} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 20,
+  },
+  inputContainer: {
+    marginVertical: 10,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+  },
+});
 
 export default CriarAgendamento;

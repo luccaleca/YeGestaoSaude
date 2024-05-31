@@ -1,21 +1,19 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { DateTimePickerAndroid } from '@react-native-community/datetimepicker';
 
-const TimeInput = () => {
-  const [time, setTime] = useState(new Date());
+const TimeInput = ({ value, onChange }) => {
 
   const showTimePicker = () => {
     DateTimePickerAndroid.open({
-      value: time,
-      onChange: (event, selectedDate) => {
-        if (selectedDate) {
-          setTime(selectedDate);
+      value: value || new Date(),
+      onChange: (event, selectedTime) => {
+        if (selectedTime) {
+          onChange(selectedTime);
         }
       },
       mode: 'time',
       display: 'default',
-      is24Hour: true,
     });
   };
 
@@ -29,7 +27,7 @@ const TimeInput = () => {
     <View style={styles.container}>
       <Text style={styles.label}>Selecione o horário:</Text>
       <TouchableOpacity onPress={showTimePicker} style={styles.input}>
-        <Text>{formatTime(time)}</Text>
+        <Text>{formatTime(value)}</Text>
       </TouchableOpacity>
     </View>
   );
