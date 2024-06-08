@@ -5,7 +5,7 @@ const registerUser = async (email, password) => {
     const userCredential = await firebaseAuth.createUserWithEmailAndPassword(email, password);
     const user = userCredential.user;
 
-    // Adicionar email ao documento do usuário no Firestore
+  
     await firebaseFirestore.collection('usuarios').doc(user.uid).set({
       email: user.email,
     });

@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity, ScrollView, Modal, Button, Alert } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, StyleSheet, Text, View, TouchableOpacity, ScrollView, Modal, Button, Alert, TextInput } from 'react-native';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from 'react-native-popup-menu';
 import SideBar from '../Bars/SideBar';
-import AddDocumentosButton from '../Buttons/AddDocumentosButton';
-import { firebaseFirestore, firebaseAuth } from '../../../config/firebaseConfig';
-import InserirDocumentos from '../../../config/Inserir/InserirDocumentos';
+import { firebaseAuth, firebaseStorage } from '../../../config/firebaseConfig';
 
 const Documentos = () => {
   const [documentos, setDocumentos] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [renameVisible, setRenameVisible] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [currentDocId, setCurrentDocId] = useState('');
+
+  useEffect(() => {
+    fetchDocumentos();
+  }, []);
 
   const fetchDocumentos = async () => {
     const user = firebaseAuth.currentUser;
@@ -18,24 +24,18 @@ const Documentos = () => {
       return;
     }
 
-    try {
-      const documentosSnapshot = await firebaseFirestore.collection('usuarios').doc(user.uid).collection('documentos').get();
-      const documentosList = documentosSnapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setDocumentos(documentosList);
-    } catch (error) {
-      console.error('Erro ao buscar documentos:', error);
-    }
-  };
+    const storageRef = firebaseStorage.ref().child(`documentos/${user.uid}`);
+    const documentosList = [];
 
-  useEffect(() => {
-    fetchDocumentos();
-  }, []);
-
-  const handleDocumentAdded = () => {
-    fetchDocumentos();
+    storageRef.listAll().then((result) => {
+      result.items.forEach(async (itemRef) => {
+        const url = await itemRef.getDownloadURL();
+        documentosList.push({ url, name: itemRef.name });
+        setDocumentos([...documentosList]);
+      });
+    }).catch((error) => {
+      console.error('Erro ao listar documentos:', error);
+    });
   };
 
   const openModal = (url) => {
@@ -48,32 +48,88 @@ const Documentos = () => {
     setModalVisible(false);
   };
 
-  const deleteDocument = async (id) => {
+  const openRenameModal = (id, currentName) => {
+    setCurrentDocId(id);
+    setNewName(currentName);
+    setRenameVisible(true);
+  };
+
+  const handleUpload = async (uri, fileName) => {
     const user = firebaseAuth.currentUser;
     if (!user) {
-      console.error('Usuário não autenticado.');
+      Alert.alert('Erro', 'Usuário não autenticado.');
       return;
     }
 
-    try {
-      await firebaseFirestore.collection('usuarios').doc(user.uid).collection('documentos').doc(id).delete();
-      Alert.alert('Sucesso', 'Documento deletado com sucesso.');
-      fetchDocumentos();
-    } catch (error) {
-      console.error('Erro ao deletar documento:', error);
-      Alert.alert('Erro', 'Não foi possível deletar o documento.');
-    }
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storageRef = firebaseStorage.ref().child(`documentos/${user.uid}/${fileName}`);
+    
+    const uploadTask = storageRef.put(blob);
+
+    uploadTask.on('state_changed', 
+      (snapshot) => {
+        // Progresso do upload
+      }, 
+      (error) => {
+        Alert.alert('Erro', 'Não foi possível adicionar o documento.');
+        console.error('Erro ao fazer upload do documento:', error);
+      }, 
+      async () => {
+        const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+        Alert.alert('Sucesso', 'Documento adicionado com sucesso.');
+        setDocumentos([...documentos, { url: downloadURL, name: fileName }]);
+        console.log('URL do documento:', downloadURL);
+      }
+    );
   };
 
-  const confirmDelete = (id) => {
+  const handleTakePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+      cameraType: 'back',
+      saveToPhotos: true,
+    };
+
+    launchCamera(options, (response) => {
+      if (response.didCancel) {
+        Alert.alert('Ação cancelada');
+      } else if (response.errorCode) {
+        Alert.alert('Erro', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const { uri, fileName } = response.assets[0];
+        handleUpload(uri, fileName || `photo_${Date.now()}.jpg`);
+      }
+    });
+  };
+
+  const handleChoosePhoto = () => {
+    const options = {
+      mediaType: 'photo',
+    };
+
+    launchImageLibrary(options, (response) => {
+      if (response.didCancel) {
+        Alert.alert('Ação cancelada');
+      } else if (response.errorCode) {
+        Alert.alert('Erro', response.errorMessage);
+      } else if (response.assets && response.assets.length > 0) {
+        const { uri, fileName } = response.assets[0];
+        handleUpload(uri, fileName || `photo_${Date.now()}.jpg`);
+      }
+    });
+  };
+
+  const handlePressAddDocument = () => {
     Alert.alert(
-      'Deletar Documento',
-      'Tem certeza que deseja deletar este documento?',
+      'Adicionar Documento',
+      'Escolha uma opção',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Deletar', onPress: () => deleteDocument(id) },
+        { text: 'Tirar Foto', onPress: handleTakePhoto },
+        { text: 'Fazer Upload de Foto', onPress: handleChoosePhoto },
       ],
-      { cancelable: false }
+      { cancelable: true }
     );
   };
 
@@ -90,22 +146,25 @@ const Documentos = () => {
           </>
         ) : (
           <ScrollView style={styles.documentList}>
-            {documentos.map(doc => (
-              <View key={doc.id} style={styles.documentContainer}>
+            {documentos.map((doc, index) => (
+              <View key={index} style={styles.documentContainer}>
                 <TouchableOpacity style={styles.documentContent} onPress={() => openModal(doc.url)}>
-                  <Text style={styles.documentText}>{doc.customName || 'Documento sem Nome'}</Text>
+                  <Text style={styles.documentText}>{doc.name || 'Documento sem Nome'}</Text>
                 </TouchableOpacity>
                 <Menu>
                   <MenuTrigger>
                     <Text style={styles.menuTrigger}>⋮</Text>
                   </MenuTrigger>
                   <MenuOptions>
-                    <MenuOption onSelect={() => confirmDelete(doc.id)} text='Deletar' />
+                    <MenuOption onSelect={() => openRenameModal(doc.id, doc.name)} text='Renomear' />
                   </MenuOptions>
                 </Menu>
               </View>
             ))}
-          </ScrollView>
+            <TouchableOpacity style={styles.button} onPress={handlePressAddDocument}>
+          <Text style={styles.buttonText}>Adicionar Documento</Text>
+        </TouchableOpacity>
+          </ScrollView> 
         )}
         <Modal visible={modalVisible} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>
@@ -117,7 +176,23 @@ const Documentos = () => {
             </View>
           </View>
         </Modal>
-        <AddDocumentosButton onDocumentAdded={handleDocumentAdded} />
+        <Modal visible={renameVisible} transparent={true} animationType="slide">
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <TextInput
+                style={styles.input}
+                placeholder="Novo nome"
+                value={newName}
+                onChangeText={setNewName}
+              />
+              <Button title="Renomear" />
+              <Button title="Cancelar" onPress={() => setRenameVisible(false)} />
+            </View>
+          </View>
+        </Modal>
+        <TouchableOpacity style={styles.button} onPress={handlePressAddDocument}>
+          <Text style={styles.buttonText}>Adicionar Documento</Text>
+        </TouchableOpacity>
         <SideBar />
       </View>
     </MenuProvider>
@@ -180,6 +255,27 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 300,
     marginBottom: 20,
+  },
+  input: {
+    width: '100%',
+    padding: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
+  button: {
+    backgroundColor: '#007AFF',
+    borderRadius: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 30,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 });
 

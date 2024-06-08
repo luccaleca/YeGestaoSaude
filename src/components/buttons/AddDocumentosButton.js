@@ -4,8 +4,8 @@ import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import InserirDocumentos from '../../../config/Inserir/InserirDocumentos';
 
 const AddDocumentosButton = ({ onDocumentAdded }) => {
-  const handleUpload = async (uri, fileName, customName) => {
-    console.log(`Uploading file: ${fileName} with custom name: ${customName} from URI: ${uri}`);
+  const handleUpload = async (uri, fileName) => {
+    const customName = `Custom_${fileName}`;
     try {
       await InserirDocumentos(uri, fileName, customName);
       Alert.alert('Sucesso', 'Documento adicionado com sucesso.');
@@ -20,18 +20,17 @@ const AddDocumentosButton = ({ onDocumentAdded }) => {
     const options = {
       mediaType: 'photo',
       cameraType: 'back',
+      saveToPhotos: true,
     };
 
-    launchCamera(options, response => {
+    launchCamera(options, (response) => {
       if (response.didCancel) {
         Alert.alert('Ação cancelada');
       } else if (response.errorCode) {
         Alert.alert('Erro', response.errorMessage);
-      } else {
-        const { uri } = response.assets[0];
-        const fileName = `photo_${Date.now()}.jpg`;
-        console.log(`Photo taken: ${uri}`);
-        promptForFileName(uri, fileName);
+      } else if (response.assets && response.assets.length > 0) {
+        const { uri, fileName } = response.assets[0];
+        handleUpload(uri, fileName || `photo_${Date.now()}.jpg`);
       }
     });
   };
@@ -41,36 +40,16 @@ const AddDocumentosButton = ({ onDocumentAdded }) => {
       mediaType: 'photo',
     };
 
-    launchImageLibrary(options, response => {
+    launchImageLibrary(options, (response) => {
       if (response.didCancel) {
         Alert.alert('Ação cancelada');
       } else if (response.errorCode) {
         Alert.alert('Erro', response.errorMessage);
-      } else {
-        const { uri } = response.assets[0];
-        const fileName = `photo_${Date.now()}.jpg`;
-        console.log(`Photo selected: ${uri}`);
-        promptForFileName(uri, fileName);
+      } else if (response.assets && response.assets.length > 0) {
+        const { uri, fileName } = response.assets[0];
+        handleUpload(uri, fileName || `photo_${Date.now()}.jpg`);
       }
     });
-  };
-
-  const promptForFileName = (uri, fileName) => {
-    Alert.prompt(
-      'Nome do Documento',
-      'Por favor, insira um nome para o documento',
-      [
-        {
-          text: 'Cancelar',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: (customName) => handleUpload(uri, fileName, customName),
-        },
-      ],
-      'plain-text'
-    );
   };
 
   const handlePress = () => {
