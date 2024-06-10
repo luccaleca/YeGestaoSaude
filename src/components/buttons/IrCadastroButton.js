@@ -19,14 +19,16 @@ const IrCadastroButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 50,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginTop: 30,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#6E8A78',
+    borderRadius: 230,
+    paddingVertical: 16, // Aumentar a altura (grossura)
+    paddingHorizontal: 100, // Aumentar a largura
+    marginTop: 20,
   },
   buttonText: {
-    color: '#FFFFFF',
+    color: '#6E8A78',
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',

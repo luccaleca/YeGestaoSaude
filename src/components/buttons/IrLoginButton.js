@@ -7,7 +7,7 @@ const IrLoginButton = ({ onPress }) => {
 
   const handlePress = () => {
     if (onPress) onPress(); // Chama a função onPress passada como prop, se existir
-    navigation.navigate('Login'); // Navega para a tela de cadastro
+    navigation.navigate('Login'); // Navega para a tela de login
   };
 
   return (
@@ -19,15 +19,15 @@ const IrLoginButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 50,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginTop: 30,
+    backgroundColor: '#63987C',
+    borderRadius: 230,
+    paddingVertical: 16, // Aumentar a altura (grossura)
+    paddingHorizontal: 120, // Aumentar a largura
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },

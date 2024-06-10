@@ -1,20 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 
-
 import IrLoginButton from '../Buttons/IrLoginButton';
-import CadastrarText from '../TextLink/CadastrarText';
 import IrCadastroButton from '../Buttons/IrCadastroButton';
-;
 
 const Inicial = () => {
   return (
     <View style={styles.container}>
       <Image source={require('../../../assets/images/LogoInvertido.png')} style={styles.logo} />
-      <Text style={styles.title}>Vamos começar</Text>
-      <Text style={styles.subtitle}>Faça o cadastro e aproveite todas as funcionalidades, e fique com saúde.</Text>
+      <Text style={styles.title}>Vamos começar!</Text>
+      <Text style={styles.subtitle}>Faça o cadastro e aproveite todas as funcionalidades que temos, e fique com saúde!</Text>
       <IrLoginButton />
-      <IrCadastroButton/>
+      <IrCadastroButton />
     </View>
   );
 }
@@ -25,25 +22,25 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    paddingTop: 20, // Adiciona espaço no topo
+    paddingTop: 20,
   },
   logo: {
-    width: "100%", // largura da imagem
-    height: 300, // altura da imagem
-    marginBottom: 20, // espaçamento inferior
+    width: "100%",
+    height: 300,
+    marginBottom: 20,
   },
   title: {
-    fontSize: 24, // tamanho da fonte maior para o título
-    fontWeight: 'bold', // negrito
-    color: 'black', // cor preta
-    marginBottom: 10, // espaçamento inferior
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: 'black',
+    marginBottom: 10,
   },
   subtitle: {
-    fontSize: 16, // tamanho da fonte para o subtítulo
-    color: 'black', // cor preta
-    marginBottom: 20, // espaçamento inferior
-    textAlign: 'center', // centralizar o texto
-    paddingHorizontal: 20, // espaçamento lateral
+    fontSize: 16,
+    color: '#6E8A78',
+    marginBottom: 20,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
 

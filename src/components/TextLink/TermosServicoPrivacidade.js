@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { SquareIcon, CheckSquareIcon } from "../../icons/Icons";
 
-const TermosServico = () => {
+const TermosServico = ({ setAcceptedTerms }) => {
     const [isChecked, setIsChecked] = useState(false);
-    const [modalVisible, setModalVisible] = useState(false);
     const navigation = useNavigation();
 
     const toggleCheckbox = () => {
-        setIsChecked(!isChecked);
+        const newValue = !isChecked;
+        setIsChecked(newValue);
+        setAcceptedTerms(newValue); // Atualiza o estado no componente pai
     };
 
     const handleTermsPress = () => {
@@ -26,18 +27,17 @@ const TermosServico = () => {
                 {isChecked ? <CheckSquareIcon /> : <SquareIcon />}
             </TouchableOpacity>
             <View style={styles.textContainer}>
-                <Text>Eu aceito os </Text>
+                <Text style={styles.text}>Eu aceito os </Text>
                 <TouchableOpacity onPress={handleTermsPress}>
-                    <Text style={styles.link}>Termos de Serviço</Text>
+                    <Text style={[styles.text, styles.link]}>Termos de Serviço</Text>
                 </TouchableOpacity>
-                <Text> e as </Text>
+                <Text style={styles.text}> e as </Text>
                 <TouchableOpacity onPress={handlePrivacyPress}>
-                    <Text style={styles.link}>Políticas de Privacidade</Text>
+                    <Text style={[styles.text, styles.link]}>Políticas de Privacidade</Text>
                 </TouchableOpacity>
             </View>
-            
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -47,11 +47,15 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flexDirection: 'row',
+        flexWrap: 'wrap',
         alignItems: 'center',
+        marginLeft: 10, // Adicionando espaçamento à esquerda
+    },
+    text: {
+        color: '#000',
     },
     link: {
-        color: 'blue',
-        textDecorationLine: 'underline',
+        color: '#739589',
     },
 });
 

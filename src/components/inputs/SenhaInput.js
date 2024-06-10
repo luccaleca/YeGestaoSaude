@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import { EyeOffIcon, MyIcon } from "../../icons/Icons";
+import { EyeOffIcon, LockIcon, EyeIcon } from "../../icons/Icons";
 
 function SenhaInput({ setPassword }) {
     const [password, setPasswordState] = useState("");
@@ -17,6 +17,9 @@ function SenhaInput({ setPassword }) {
 
     return (
         <View style={styles.container}>
+            <View style={styles.iconContainer}>
+                <LockIcon style={styles.LockIcon} />
+            </View>
             <TextInput
                 style={styles.input}
                 placeholder="Digite sua senha"
@@ -26,12 +29,10 @@ function SenhaInput({ setPassword }) {
                 autoCapitalize="none"
                 autoCompleteType="password"
                 autoCorrect={false}
+                placeholderTextColor="#8e8e93" // Cor do placeholder para melhor visibilidade
             />
-            <View style={styles.iconContainer}>
-                <MyIcon style={styles.myIcon} />
-            </View>
             <TouchableOpacity style={styles.iconSenhaContainer} onPress={togglePasswordVisibility}>
-                {hidePassword ? <MyIcon style={styles.myIcon} /> : <EyeOffIcon style={styles.myIcon} />}
+                {hidePassword ? <EyeOffIcon style={styles.Icons} /> : <EyeIcon style={styles.Icons} />}
             </TouchableOpacity>
         </View>
     );
@@ -39,33 +40,32 @@ function SenhaInput({ setPassword }) {
 
 const styles = StyleSheet.create({
     container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F5F5F5',
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+        borderRadius: 25,
+        paddingVertical: 8, // Diminuir o padding vertical
+        paddingHorizontal: 20,
         marginVertical: 10,
     },
     input: {
-        borderWidth: 1,
-        borderColor: "black",
-        paddingLeft: 40,
-        borderRadius: 5,
-        paddingHorizontal: 10,
+        flex: 1,
+        paddingLeft: 10,
+        fontSize: 14, // Ajustar o tamanho da fonte para legibilidade
+        height: 40, // Ajustar a altura do input para manter o placeholder visível
     },
     iconContainer: {
-        position: "absolute",
-        left: 5,
-        top: 4,
-        backgroundColor: 'yellow',
-        borderWidth: 1,
-        borderColor: 'black'
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     iconSenhaContainer: {
-        position: "absolute",
-        right: 30,
-        top: 4,
-        backgroundColor: 'yellow',
-        borderWidth: 1,
-        borderColor: 'black'
+        justifyContent: 'center',
+        alignItems: 'center',
     },
-    myIcon: {
-        marginLeft: 10,
+    Icons: {
+        // Adicione estilos adicionais para o ícone, se necessário
     }
 });
 

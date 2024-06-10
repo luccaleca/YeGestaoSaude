@@ -11,7 +11,7 @@ import { Text, TouchableOpacity, StyleSheet, View } from "react-native";
 const CadastrarText = ({ text, onPress}) => {
     return (
         <View style={styles.container}>
-            <Text>Você ainda não tem cadastro? </Text>
+            <Text>Ainda não tem cadastro? </Text>
         <TouchableOpacity onPress={onPress}>
             <Text style={styles.link}>Cadastre-se</Text>
         </TouchableOpacity>
@@ -21,8 +21,7 @@ const CadastrarText = ({ text, onPress}) => {
 
 const styles = StyleSheet.create({
     link: {
-        color: 'blue',
-        textDecorationLine: 'underline',
+        color: '#739589',
     },
     container: {
         flexDirection: 'row', // Alinha os itens na horizontal

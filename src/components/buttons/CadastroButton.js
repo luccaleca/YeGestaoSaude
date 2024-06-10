@@ -1,10 +1,9 @@
-// CadastroButton.js
 import React from 'react';
 import { StyleSheet, TouchableOpacity, Text } from 'react-native';
 
-const CadastroButton = ({ onPress }) => {
+const CadastroButton = ({ onPress, disabled }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, disabled && styles.buttonDisabled]} onPress={onPress} disabled={disabled}>
       <Text style={styles.buttonText}>Cadastrar</Text>
     </TouchableOpacity>
   );
@@ -12,15 +11,18 @@ const CadastroButton = ({ onPress }) => {
 
 const styles = StyleSheet.create({
   button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 50,
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    marginTop: 30,
+    backgroundColor: '#63987C',
+    borderRadius: 230,
+    paddingVertical: 16, // aumentar a altura (grossura)
+    paddingHorizontal: 120, // aumentar a largura
+    marginTop: 20,
+  },
+  buttonDisabled: {
+    backgroundColor: '#A9A9A9',
   },
   buttonText: {
     color: '#FFFFFF',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
     textAlign: 'center',
   },
