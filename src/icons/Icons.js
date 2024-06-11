@@ -13,11 +13,11 @@ export const SquareIcon = () => <Icon name="square-o" size={30} color = "#ACB2B9
 
 export const CheckSquareIcon = () => <Icon name="check-square-o" size={30} color ="#63987C" />
 
-export const Calendar = () => <Icon name="calendar" size={30} color="#900" />
+export const Calendar = () => <Icon name="calendar" size={30} color="#ACB2B9" />
 
-export const Home = () => <Icon name="home" size={30} color="#900" />
+export const Home = () => <Icon name="home" size={30} color="#ACB2B9" />
 
-export const Files = () => <Icon name="files-o" size={30} color="#900" />
+export const Files = () => <Icon name="files-o" size={30} color="#ACB2B9" />
 
 export const UserIcon = () => <Icon name="user" size={30} color="#ACB2B9" />
 

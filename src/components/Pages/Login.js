@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import EmailInput from '../Inputs/EmailInput';
 import SenhaInput from '../Inputs/SenhaInput';
@@ -19,18 +20,19 @@ const Login = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const handleLoginPress = () => {
-    firebaseAuth.signInWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        const user = userCredential.user;
-        console.log('Usuário logado:', user);
-        navigation.navigate('Menu');
-      })
-      .catch((error) => {
-        const errorMessage = error.message;
-        console.error('Erro ao fazer login:', errorMessage);
-        setErrorMessage(errorMessage);
-      });
+  const handleLoginPress = async () => {
+    try {
+      const userCredential = await firebaseAuth.signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+      console.log('Usuário logado:', user);
+
+      // Passe diretamente o nome para o menu
+      navigation.navigate('Menu', { userId: user.uid });
+    } catch (error) {
+      const errorMessage = error.message;
+      console.error('Erro ao fazer login:', errorMessage);
+      setErrorMessage(errorMessage);
+    }
   };
 
   const handleCadastroPress = () => {
@@ -42,7 +44,7 @@ const Login = ({ navigation }) => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollContainer}>
+    <KeyboardAwareScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.container}>
         <TouchableOpacity style={styles.backButton} onPress={() => navigation.navigate('Inicial')}>
           <Icon name="chevron-left" size={24} color="black" />
@@ -64,7 +66,7 @@ const Login = ({ navigation }) => {
           <DivisoriaOu text="ou" />
         </View>
       </View>
-    </ScrollView>
+    </KeyboardAwareScrollView>
   );
 };
 
@@ -78,7 +80,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    paddingTop: 10,
+    paddingTop: 150, // Ajuste este valor para mover os componentes para baixo
     position: 'relative',
     top: -140,
   },

@@ -2,28 +2,35 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 
-import Inicial from './components/Pages/Inicial';
 import Agenda from './components/Pages/Agenda';
 import Cadastro from './components/Pages/Cadastro';
 import CriarAgendamento from './components/Pages/CriarAgendamento';
-import EditarAgendamento from './components/Pages/EditarAgendamento';
-import Documentos from './components/Pages/Documentos';
-import Login from './components/Pages/Login';
-import Menu from './components/Pages/Menu';
-import PoliticaDePrivacidade from './components/Pages/PoliticaDePrivacidade';
-import TermosDeServico from './components/Pages/TermosDeServico';
-import Perfil from './components/Pages/Perfil';
 import DadosPessoais from './components/Pages/DadosPessoais';
 import DocumentoIdentidade from './components/Pages/DocumentoIdentidade';
-import HistoricoMedico from './components/Pages/HistoricoMedico';
-import Medicamentos from './components/Pages/Medicamentos';
+import Documentos from './components/Pages/Documentos';
+import EditarAgendamento from './components/Pages/EditarAgendamento';
 import EsqueciSenha from './components/Pages/EsqueciSenha';
+import HistoricoMedico from './components/Pages/HistoricoMedico';
+import Inicial from './components/Pages/Inicial';
+import Login from './components/Pages/Login';
+import Medicamentos from './components/Pages/Medicamentos';
+import Menu from './components/Pages/Menu/Menu';
+import Perfil from './components/Pages/Perfil';
+import PoliticaDePrivacidade from './components/Pages/PoliticaDePrivacidade';
+import TermosDeServico from './components/Pages/TermosDeServico';
 
-import SplashScreen from './components/Pages/OnBoarding/SplashScreen';
 import Onboarding1 from './components/Pages/OnBoarding/OnBoarding1';
 import Onboarding2 from './components/Pages/OnBoarding/OnBoarding2';
 import Onboarding3 from './components/Pages/OnBoarding/OnBoarding3';
 import Onboarding4 from './components/Pages/OnBoarding/OnBoarding4';
+import SplashScreen from './components/Pages/OnBoarding/SplashScreen';
+
+import ArtigoSaudeMenu1 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu1';
+import ArtigoSaudeMenu2 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu2';
+import ArtigoSaudeMenu3 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu3';
+import ArtigoSaudeMenu4 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu4';
+
+
 
 const Stack = createNativeStackNavigator();
 
@@ -40,7 +47,7 @@ const App = () => {
         <Stack.Screen name="Login" component={Login} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="EsqueciSenha" component={EsqueciSenha} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="Cadastro" component={Cadastro} options={{ headerTitle: '', headerBackTitleVisible: false }} />
-        <Stack.Screen name="Menu" component={Menu} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="Menu" component={Menu} options={{ headerShown: false }} />
         <Stack.Screen name="Políticas De Privacidade" component={PoliticaDePrivacidade} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="Termos De Servico" component={TermosDeServico} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="Agenda" component={Agenda} options={{ headerTitle: '', headerBackTitleVisible: false }} />
@@ -52,6 +59,10 @@ const App = () => {
         <Stack.Screen name="HistoricoMedico" component={HistoricoMedico} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="Medicamentos" component={Medicamentos} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="EditarAgendamento" component={EditarAgendamento} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ArtigoSaudeMenu1" component={ArtigoSaudeMenu1} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ArtigoSaudeMenu2" component={ArtigoSaudeMenu2} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ArtigoSaudeMenu3" component={ArtigoSaudeMenu3} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ArtigoSaudeMenu4" component={ArtigoSaudeMenu4} options={{ headerTitle: '', headerBackTitleVisible: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

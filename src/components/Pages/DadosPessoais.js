@@ -63,7 +63,7 @@ const DadosPessoais = () => {
       <Text style={styles.title}>Dados Pessoais</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nome"
+        placeholder="Nome Completo"
         value={nome}
         onChangeText={setNome}
         keyboardType="default"

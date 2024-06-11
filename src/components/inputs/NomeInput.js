@@ -1,36 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import { UserIcon, CheckIcon } from "../../icons/Icons";
 
-function NameInput() {
-    const [name, setName] = useState("");
-
-    const handleNameChange = (text) => {
-        setName(text);
-    };
-
+function NameInput({ value, onChangeText }) {
     const isNameValid = (name) => {
-        // Validação simples para nome (pode ser adaptada conforme necessário)
         return name.length > 2; // Exemplo: Nome deve ter mais de 2 caracteres
     };
 
     return (
-        <View style={[styles.container, isNameValid(name) && styles.validInputContainer]}>
+        <View style={[styles.container, isNameValid(value) && styles.validInputContainer]}>
             <View style={styles.iconContainer}>
                 <UserIcon style={styles.icon} />
             </View>
             <TextInput
                 style={styles.input}
-                placeholder="Digite seu nome"
-                value={name}
-                onChangeText={handleNameChange}
+                placeholder="Digite seu nome Completo"
+                value={value}
+                onChangeText={onChangeText}
                 keyboardType="default"
                 autoCapitalize="words"
                 autoCompleteType="name"
                 autoCorrect={false}
                 placeholderTextColor="#8e8e93"
             />
-            {isNameValid(name) && (
+            {isNameValid(value) && (
                 <View style={styles.iconContainer}>
                     <CheckIcon style={styles.icon} />
                 </View>

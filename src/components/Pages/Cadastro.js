@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, Dimensions, Modal, TouchableOpacity } from 'react-native';
+import firestore from '@react-native-firebase/firestore';
 
 import EmailInput from '../Inputs/EmailInput';
 import SenhaInput from '../Inputs/SenhaInput';
@@ -21,13 +22,20 @@ const Cadastro = ({ navigation }) => {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   const handleRegister = async () => {
+    if (!acceptedTerms) {
+      setErrorMessage('Você deve aceitar os Termos de Serviço e as Políticas de Privacidade');
+      return;
+    }
     if (password !== confirmPassword || password === '' || confirmPassword === '') {
       setErrorMessage('As senhas não coincidem');
       return;
     }
-    
+
+    console.log('Nome:', nome); // Adicione logs para depuração
+    console.log('Email:', email);
+
     try {
-      await registerUser(email, password);
+      const userCredential = await registerUser(email, password, nome);
       setModalVisible(true);
     } catch (error) {
       setErrorMessage(error.message);
@@ -59,7 +67,7 @@ const Cadastro = ({ navigation }) => {
       </View>
       <View style={styles.bottomContainer}>
         {errorMessage && <Text style={styles.errorText}>{errorMessage}</Text>}
-        <TermosServico setAcceptedTerms={setAcceptedTerms} />
+        <TermosServico acceptedTerms={acceptedTerms} setAcceptedTerms={setAcceptedTerms} />
         <CadastroButton onPress={handleRegister} disabled={!acceptedTerms} />
       </View>
       <Modal
@@ -90,9 +98,10 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
     color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginBottom: 20,
   },
   formContainer: {
     width: width * 0.8,
@@ -133,7 +142,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   loginButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#63987C', // Cor de fundo do botão de login
     borderRadius: 50,
     paddingVertical: 12,
     paddingHorizontal: 24,
