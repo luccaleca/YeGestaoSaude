@@ -31,7 +31,8 @@ import ArtigoSaudeMenu1 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu1';
 import ArtigoSaudeMenu2 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu2';
 import ArtigoSaudeMenu3 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu3';
 import ArtigoSaudeMenu4 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu4';
-import FotoCarteirinha from './components/Pages/Menu/fotocarteirinha';
+import FotoCarteirinha from './components/Pages/Menu/FotoCarteirinha';
+import ExamesLaboratoriais from './components/Pages/ExamesLaboratoriais';
 
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,7 @@ const App = () => {
         <Stack.Screen name="FotoCarteirinha" component={FotoCarteirinha} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="ImagemDocumento" component={ImagemDocumento} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="ImagemIdentidade" component={ImagemIdentidade} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ExamesLaboratoriais" component={ExamesLaboratoriais} options={{ headerTitle: '', headerBackTitleVisible: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

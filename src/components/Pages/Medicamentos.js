@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Alert, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
 import { inserirMedicamentos } from '../../../config/Inserir/InserirMedicamentos';
 
 const Medicamentos = () => {
   const [currentMedications, setCurrentMedications] = useState('');
   const [pastMedications, setPastMedications] = useState('');
+  const navigation = useNavigation();
   const userId = firebaseAuth.currentUser?.uid;
 
   useEffect(() => {
@@ -74,9 +76,19 @@ const Medicamentos = () => {
         />
       </View>
 
+
+      <TouchableOpacity
+        style={styles.referenceButton}
+        onPress={() => navigation.navigate('ExamesLaboratoriais')}
+      >
+        <Text style={styles.referenceButtonText}>Ver Intervalos de Referência</Text>
+      </TouchableOpacity>
+      
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.saveButtonText}>Salvar</Text>
       </TouchableOpacity>
+
+      
     </ScrollView>
   );
 };
@@ -128,6 +140,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  referenceButton: {
+    backgroundColor: '#199A8E',
+    borderRadius: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  referenceButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: 'bold',

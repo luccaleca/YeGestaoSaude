@@ -61,6 +61,14 @@ const HistoricoMedico = () => {
     }
   }, [peso, altura]);
 
+  const getBmiStatus = () => {
+    const imc = parseFloat(bmi);
+    if (imc < 18.5) return 'Abaixo do peso';
+    if (imc < 24.9) return 'Peso normal';
+    if (imc < 29.9) return 'Sobrepeso';
+    return 'Obesidade';
+  };
+
   const handleSave = async () => {
     const historicoMedico = {
       afericaoPressao: bloodPressure,
@@ -81,6 +89,16 @@ const HistoricoMedico = () => {
     }
   };
 
+  const getBmiIndicatorStyle = (range) => {
+    const imc = parseFloat(bmi);
+    let backgroundColor = '#E8E8E8';
+    if (range === 'underweight' && imc < 18.5) backgroundColor = '#FFFF00'; // Amarelo
+    if (range === 'normal' && imc >= 18.5 && imc < 24.9) backgroundColor = '#00FF00'; // Verde
+    if (range === 'overweight' && imc >= 24.9 && imc < 29.9) backgroundColor = '#FFA500'; // Laranja
+    if (range === 'obese' && imc >= 29.9) backgroundColor = '#FF0000'; // Vermelho
+    return [styles.bmiIndicator, { backgroundColor }];
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Histórico Médico</Text>
@@ -92,7 +110,7 @@ const HistoricoMedico = () => {
           placeholder="Exemplo: 120/80 mmHg"
           value={bloodPressure}
           onChangeText={setBloodPressure}
-          keyboardType="default" // Alterado para teclado padrão
+          keyboardType="default"
         />
       </View>
 
@@ -103,19 +121,26 @@ const HistoricoMedico = () => {
           placeholder="Exemplo: 90 mg/dL"
           value={glucoseLevel}
           onChangeText={setGlucoseLevel}
-          keyboardType="default" // Alterado para teclado padrão
+          keyboardType="default"
         />
       </View>
 
       <View style={styles.inputContainer}>
         <Text style={styles.label}>IMC</Text>
-        <Text style={styles.helperText}>O IMC vai calcular o resultado automaticamente usando sua massa/altura</Text>
+        <Text style={styles.helperText}>O IMC será calculado automaticamente usando sua massa/altura</Text>
         <TextInput
           style={[styles.input, styles.imcInput]}
           placeholder="Exemplo: 24.5"
           value={bmi}
           editable={false}
         />
+        <View style={styles.bmiIndicatorContainer}>
+          <View style={getBmiIndicatorStyle('underweight')} title="Abaixo do peso"></View>
+          <View style={getBmiIndicatorStyle('normal')} title="Peso normal"></View>
+          <View style={getBmiIndicatorStyle('overweight')} title="Sobrepeso"></View>
+          <View style={getBmiIndicatorStyle('obese')} title="Obesidade"></View>
+        </View>
+        <Text style={styles.bmiStatusText}>{getBmiStatus()}</Text>
       </View>
 
       <View style={styles.inputContainer}>
@@ -214,13 +239,31 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   imcInput: {
-    backgroundColor: '#E8F3F1', // Realce para o campo IMC
-    fontWeight: 'bold', // Deixa o texto do IMC em negrito
+    backgroundColor: '#D5F5E3',
+    fontWeight: 'bold',
   },
   helperText: {
     fontSize: 14,
     color: '#555',
     marginBottom: 5,
+  },
+  bmiIndicatorContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  bmiIndicator: {
+    height: 10,
+    width: '23%',
+    borderRadius: 5,
+    backgroundColor: '#E8E8E8',
+  },
+  bmiStatusText: {
+    marginTop: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#199A8E',
   },
   saveButton: {
     backgroundColor: '#199A8E',
