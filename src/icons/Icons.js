@@ -21,7 +21,7 @@ export const Files = () => <Icon name="files-o" size={30} color="#ACB2B9" />
 
 export const UserIcon = () => <Icon name="user" size={30} color="#ACB2B9" />
 
-export const Plus = () => <Icon name="plus" size={30} color="#900" />
+export const Plus = () => <Icon name="plus" size={30} color="#199A8E" />
 
 export const Bell = () => <Icon name="bell-o" size={30} color="#900" />
 

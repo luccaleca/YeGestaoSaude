@@ -18,6 +18,8 @@ import Menu from './components/Pages/Menu/Menu';
 import Perfil from './components/Pages/Perfil';
 import PoliticaDePrivacidade from './components/Pages/PoliticaDePrivacidade';
 import TermosDeServico from './components/Pages/TermosDeServico';
+import ImagemDocumento from './components/Pages/ImagemDocumento';
+import ImagemIdentidade from './components/Pages/ImagemIdentidade'
 
 import Onboarding1 from './components/Pages/OnBoarding/OnBoarding1';
 import Onboarding2 from './components/Pages/OnBoarding/OnBoarding2';
@@ -29,8 +31,7 @@ import ArtigoSaudeMenu1 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu1';
 import ArtigoSaudeMenu2 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu2';
 import ArtigoSaudeMenu3 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu3';
 import ArtigoSaudeMenu4 from './components/Pages/ArtigosSaude/ArtigoSaudeMenu4';
-
-
+import FotoCarteirinha from './components/Pages/Menu/fotocarteirinha';
 
 const Stack = createNativeStackNavigator();
 
@@ -63,6 +64,9 @@ const App = () => {
         <Stack.Screen name="ArtigoSaudeMenu2" component={ArtigoSaudeMenu2} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="ArtigoSaudeMenu3" component={ArtigoSaudeMenu3} options={{ headerTitle: '', headerBackTitleVisible: false }} />
         <Stack.Screen name="ArtigoSaudeMenu4" component={ArtigoSaudeMenu4} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="FotoCarteirinha" component={FotoCarteirinha} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ImagemDocumento" component={ImagemDocumento} options={{ headerTitle: '', headerBackTitleVisible: false }} />
+        <Stack.Screen name="ImagemIdentidade" component={ImagemIdentidade} options={{ headerTitle: '', headerBackTitleVisible: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

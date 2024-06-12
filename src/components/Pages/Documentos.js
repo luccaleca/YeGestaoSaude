@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Image, StyleSheet, Text, View, TouchableOpacity, ScrollView, Modal, Button, Alert, TextInput } from 'react-native';
+import { Image, StyleSheet, Text, View, TouchableOpacity, ScrollView, Modal, Alert, TextInput } from 'react-native';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from 'react-native-popup-menu';
+import { useNavigation } from '@react-navigation/native';
 import SideBar from '../Bars/SideBar';
 import { firebaseAuth, firebaseStorage } from '../../../config/firebaseConfig';
 
@@ -12,6 +13,7 @@ const Documentos = () => {
   const [renameVisible, setRenameVisible] = useState(false);
   const [newName, setNewName] = useState('');
   const [currentDocId, setCurrentDocId] = useState('');
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchDocumentos();
@@ -39,19 +41,49 @@ const Documentos = () => {
   };
 
   const openModal = (url) => {
-    setSelectedImage(url);
-    setModalVisible(true);
-  };
-
-  const closeModal = () => {
-    setSelectedImage(null);
-    setModalVisible(false);
+    navigation.navigate('ImagemDocumento', { imageUrl: url });
   };
 
   const openRenameModal = (id, currentName) => {
     setCurrentDocId(id);
     setNewName(currentName);
     setRenameVisible(true);
+  };
+
+  const handleRename = () => {
+    if (newName.trim() === '') {
+      Alert.alert('Erro', 'O nome não pode estar vazio.');
+      return;
+    }
+
+    const updatedDocumentos = documentos.map(doc => {
+      if (doc.id === currentDocId) {
+        return { ...doc, name: newName };
+      }
+      return doc;
+    });
+
+    setDocumentos(updatedDocumentos);
+    setRenameVisible(false);
+    setNewName('');
+  };
+
+  const handleDelete = (fileName) => {
+    const user = firebaseAuth.currentUser;
+    if (!user) {
+      Alert.alert('Erro', 'Usuário não autenticado.');
+      return;
+    }
+
+    const storageRef = firebaseStorage.ref().child(`documentos/${user.uid}/${fileName}`);
+
+    storageRef.delete().then(() => {
+      setDocumentos(documentos.filter(doc => doc.name !== fileName));
+      Alert.alert('Sucesso', 'Documento excluído com sucesso.');
+    }).catch((error) => {
+      Alert.alert('Erro', 'Não foi possível excluir o documento.');
+      console.error('Erro ao excluir documento:', error);
+    });
   };
 
   const handleUpload = async (uri, fileName) => {
@@ -143,6 +175,9 @@ const Documentos = () => {
               style={styles.semDocumento}
             />
             <Text style={styles.text}>Quando você adicionar seus documentos, eles estarão seguros aqui</Text>
+            <TouchableOpacity style={styles.button} onPress={handlePressAddDocument}>
+              <Text style={styles.buttonText}>Adicionar Documento</Text>
+            </TouchableOpacity>
           </>
         ) : (
           <ScrollView style={styles.documentList}>
@@ -157,42 +192,37 @@ const Documentos = () => {
                   </MenuTrigger>
                   <MenuOptions>
                     <MenuOption onSelect={() => openRenameModal(doc.id, doc.name)} text='Renomear' />
+                    <MenuOption onSelect={() => handleDelete(doc.name)} text='Excluir' />
                   </MenuOptions>
                 </Menu>
               </View>
             ))}
             <TouchableOpacity style={styles.button} onPress={handlePressAddDocument}>
-          <Text style={styles.buttonText}>Adicionar Documento</Text>
-        </TouchableOpacity>
-          </ScrollView> 
+              <Text style={styles.buttonText}>Adicionar Documento</Text>
+            </TouchableOpacity>
+          </ScrollView>
         )}
-        <Modal visible={modalVisible} transparent={true} animationType="slide">
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              {selectedImage && (
-                <Image source={{ uri: selectedImage }} style={styles.image} />
-              )}
-              <Button title="Fechar" onPress={closeModal} />
-            </View>
-          </View>
-        </Modal>
         <Modal visible={renameVisible} transparent={true} animationType="slide">
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
+              <Text style={styles.modalTitle}>Renomear Documento</Text>
               <TextInput
                 style={styles.input}
                 placeholder="Novo nome"
                 value={newName}
                 onChangeText={setNewName}
               />
-              <Button title="Renomear" />
-              <Button title="Cancelar" onPress={() => setRenameVisible(false)} />
+              <View style={styles.modalButtonContainer}>
+                <TouchableOpacity style={styles.modalButton} onPress={handleRename}>
+                  <Text style={styles.modalButtonText}>Renomear</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.modalButton} onPress={() => setRenameVisible(false)}>
+                  <Text style={styles.modalButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </Modal>
-        <TouchableOpacity style={styles.button} onPress={handlePressAddDocument}>
-          <Text style={styles.buttonText}>Adicionar Documento</Text>
-        </TouchableOpacity>
         <SideBar />
       </View>
     </MenuProvider>
@@ -219,7 +249,7 @@ const styles = StyleSheet.create({
   },
   documentContainer: {
     flexDirection: 'row',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#E8F3F1',
     padding: 15,
     marginVertical: 10,
     borderRadius: 10,
@@ -251,21 +281,40 @@ const styles = StyleSheet.create({
     padding: 20,
     alignItems: 'center',
   },
-  image: {
-    width: '100%',
-    height: 300,
-    marginBottom: 20,
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
   },
   input: {
     width: '100%',
     padding: 10,
-    borderColor: '#ccc',
+    borderColor: '#199A8E',
     borderWidth: 1,
-    borderRadius: 5,
-    marginBottom: 10,
+    borderRadius: 10,
+    marginBottom: 20,
+    backgroundColor: '#E8F3F1',
+  },
+  modalButtonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  modalButton: {
+    backgroundColor: '#199A8E',
+    borderRadius: 10,
+    padding: 12,
+    flex: 1,
+    marginHorizontal: 5,
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   button: {
-    backgroundColor: '#007AFF',
+    backgroundColor: '#199A8E',
     borderRadius: 50,
     paddingVertical: 12,
     paddingHorizontal: 24,

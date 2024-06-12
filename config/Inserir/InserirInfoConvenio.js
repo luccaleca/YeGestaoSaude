@@ -1,6 +1,7 @@
+// FirebaseInfoConvenio.js
 import firestore from '@react-native-firebase/firestore';
 
-const InserirInfoConvenio = async (userId, planType, cardNumber, validity) => {
+const InserirInfoConvenio = async (userId, planType, cardNumber, validity, cardImageUrl) => {
   try {
     const convenioRef = firestore()
       .collection('usuarios')
@@ -12,7 +13,8 @@ const InserirInfoConvenio = async (userId, planType, cardNumber, validity) => {
       planType: planType,
       cardNumber: cardNumber,
       validity: validity,
-    }, { merge: true });  // Utilize merge para atualizar os campos existentes sem criar um novo documento
+      cardImageUrl: cardImageUrl,
+    }, { merge: true });
 
     console.log('Informações do convênio salvas com sucesso');
   } catch (error) {

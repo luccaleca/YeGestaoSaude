@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TextInput, Alert } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
+import { launchImageLibrary, launchCamera } from 'react-native-image-picker';
 import { InserirInfoConvenio } from '../../../../config/Inserir/InserirInfoConvenio';
+import { useNavigation } from '@react-navigation/native';
 
 const CarteirinhaConvenio = ({ userId }) => {
   const [userName, setUserName] = useState('');
@@ -9,6 +12,9 @@ const CarteirinhaConvenio = ({ userId }) => {
   const [cardNumber, setCardNumber] = useState('');
   const [validity, setValidity] = useState('');
   const [showCard, setShowCard] = useState(false);
+  const [cardImageUrl, setCardImageUrl] = useState('');
+  const [imageChanged, setImageChanged] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     if (userId) {
@@ -40,6 +46,7 @@ const CarteirinhaConvenio = ({ userId }) => {
             setPlanType(convenioData.planType || '');
             setCardNumber(convenioData.cardNumber || '');
             setValidity(convenioData.validity || '');
+            setCardImageUrl(convenioData.cardImageUrl || '');
             setShowCard(true); // Mostrar a carteirinha se os dados existirem
           } else {
             console.log('Documento de carteirinhaConvenio não encontrado');
@@ -58,8 +65,18 @@ const CarteirinhaConvenio = ({ userId }) => {
 
   const handleSave = async () => {
     try {
-      await InserirInfoConvenio(userId, planType, cardNumber, validity);
+      let imageUrl = cardImageUrl;
+
+      if (imageChanged && cardImageUrl) {
+        const uploadUri = cardImageUrl.replace('file://', '');
+        const storageRef = storage().ref(`cartoesConvenio/${userId}/cardImage.jpg`);
+        await storageRef.putFile(uploadUri);
+        imageUrl = await storageRef.getDownloadURL();
+      }
+
+      await InserirInfoConvenio(userId, planType, cardNumber, validity, imageUrl);
       setShowCard(true);
+      setImageChanged(false);
     } catch (error) {
       console.error('Erro ao salvar informações do convênio:', error);
       Alert.alert('Erro', 'Não foi possível salvar as informações do convênio.');
@@ -68,6 +85,35 @@ const CarteirinhaConvenio = ({ userId }) => {
 
   const handleEdit = () => {
     setShowCard(false);
+  };
+
+  const handleSelectImage = () => {
+    Alert.alert(
+      'Selecionar Imagem',
+      'Escolha uma opção',
+      [
+        { text: 'Fazer Upload', onPress: () => launchImageLibrary({ mediaType: 'photo' }, handleImageResponse) },
+        { text: 'Tirar Foto', onPress: () => launchCamera({ mediaType: 'photo' }, handleImageResponse) },
+        { text: 'Cancelar', style: 'cancel' },
+      ],
+      { cancelable: true }
+    );
+  };
+
+  const handleImageResponse = (response) => {
+    if (response.didCancel) {
+      console.log('Seleção de imagem cancelada');
+    } else if (response.error) {
+      console.error('Erro ao selecionar imagem:', response.error);
+    } else {
+      const { uri } = response.assets[0];
+      setCardImageUrl(uri);
+      setImageChanged(true);
+    }
+  };
+
+  const handleViewImage = () => {
+    navigation.navigate('FotoCarteirinha', { imageUrl: cardImageUrl });
   };
 
   return (
@@ -98,7 +144,7 @@ const CarteirinhaConvenio = ({ userId }) => {
             onChangeText={setValidity}
             keyboardType="default"
           />
-          <TouchableOpacity style={styles.uploadButton}>
+          <TouchableOpacity style={styles.uploadButton} onPress={handleSelectImage}>
             <Text style={styles.uploadButtonText}>Inserir Imagem Carteirinha</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
@@ -119,7 +165,7 @@ const CarteirinhaConvenio = ({ userId }) => {
             <Text style={styles.infoText}><Text style={styles.label}>Validade: </Text>{validity}</Text>
           </View>
           <View style={styles.cardButtons}>
-            <TouchableOpacity style={[styles.button, styles.leftButton]}>
+            <TouchableOpacity style={[styles.button, styles.leftButton]} onPress={handleViewImage}>
               <Text style={styles.buttonText}>Carteirinha digital</Text>
             </TouchableOpacity>
             <TouchableOpacity style={[styles.button, styles.rightButton]} onPress={handleSave}>

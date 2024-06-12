@@ -43,15 +43,25 @@ const AgendamentoCard = ({ agendamento, onDelete }) => {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>Agendamento</Text>
-      <Text style={styles.text}>Nome do Especialista: {nomeEspecialista}</Text>
-      <Text style={styles.text}>Especialidade: {especialidade}</Text>
-      <Text style={styles.text}>Data: {data}</Text>
-      <Text style={styles.text}>Hora: {horario}</Text>
-      <Text style={styles.text}>Status: {status}</Text>
+      <Text style={styles.text}>
+        <Text style={styles.label}>Nome do Especialista: </Text>{nomeEspecialista}
+      </Text>
+      <Text style={styles.text}>
+        <Text style={styles.label}>Especialidade: </Text>{especialidade}
+      </Text>
+      <Text style={styles.text}>
+        <Text style={styles.label}>Data: </Text>{data}
+      </Text>
+      <Text style={styles.text}>
+        <Text style={styles.label}>Hora: </Text>{horario}
+      </Text>
+      <Text style={styles.text}>
+        <Text style={styles.label}>Status: </Text>{status}
+      </Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.buttonCancel} onPress={confirmDelete}>
-          <Text style={styles.buttonText}>Cancelar</Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.buttonCancel} onPress={confirmDelete}>
+  <Text style={styles.buttonCancelText}>Cancelar</Text>
+</TouchableOpacity>
         <TouchableOpacity style={styles.buttonEdit} onPress={handleEdit}>
           <Text style={styles.buttonText}>Editar</Text>
         </TouchableOpacity>
@@ -81,20 +91,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
   },
+  label: {
+    fontWeight: 'bold',
+    color: 'black',
+  },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginTop: 10,
   },
   buttonCancel: {
-    backgroundColor: '#f00',
+    backgroundColor: '#e8f3f1', // Cor verde claro ajustada
     padding: 10,
     borderRadius: 5,
     width: '48%',
     alignItems: 'center',
+
   },
+  buttonCancelText: {
+    color: 'black', // Texto preto para o botão cancelar
+    fontWeight: 'bold',
+  },
+
   buttonEdit: {
-    backgroundColor: '#00f',
+    backgroundColor: '#199A8E', // Cor verde mais forte
     padding: 10,
     borderRadius: 5,
     width: '48%',

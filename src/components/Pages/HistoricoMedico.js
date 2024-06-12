@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, Alert, View } from 'react-native';
 import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
-import inserirHistoricoMedico from '../../../config/Inserir/InserirHistorico_medico'; // Importe a função inserirHistoricoMedico
-import SaveButton from '../Buttons/SaveButton';
+import inserirHistoricoMedico from '../../../config/Inserir/InserirHistorico_medico';
 
 const HistoricoMedico = () => {
   const [bloodPressure, setBloodPressure] = useState('');
@@ -12,6 +11,8 @@ const HistoricoMedico = () => {
   const [familyDiseases, setFamilyDiseases] = useState('');
   const [allergies, setAllergies] = useState('');
   const [otherNotes, setOtherNotes] = useState('');
+  const [peso, setPeso] = useState('');
+  const [altura, setAltura] = useState('');
 
   const userId = firebaseAuth.currentUser?.uid;
 
@@ -34,10 +35,31 @@ const HistoricoMedico = () => {
       }
     };
 
+    const fetchDadosPessoais = async () => {
+      try {
+        const doc = await firebaseFirestore.collection('usuarios').doc(userId).collection('dados_pessoais').doc('info').get();
+        if (doc.exists) {
+          const data = doc.data();
+          setPeso(data.peso || '');
+          setAltura(data.altura || '');
+        }
+      } catch (error) {
+        console.error('Erro ao buscar dados pessoais:', error);
+      }
+    };
+
     if (userId) {
       fetchHistoricoMedico();
+      fetchDadosPessoais();
     }
   }, [userId]);
+
+  useEffect(() => {
+    if (peso && altura) {
+      const imc = (parseFloat(peso) / (parseFloat(altura) * parseFloat(altura))).toFixed(2);
+      setBmi(imc);
+    }
+  }, [peso, altura]);
 
   const handleSave = async () => {
     const historicoMedico = {
@@ -51,83 +73,110 @@ const HistoricoMedico = () => {
     };
 
     try {
-      await inserirHistoricoMedico(userId, historicoMedico); // Chame a função inserirHistoricoMedico com os dados do usuário
-      console.log('Histórico médico adicionado com sucesso');
+      await inserirHistoricoMedico(userId, historicoMedico);
+      Alert.alert('Sucesso', 'Histórico médico adicionado com sucesso');
     } catch (error) {
       console.error('Erro ao adicionar histórico médico:', error);
+      Alert.alert('Erro', 'Não foi possível adicionar o histórico médico');
     }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Histórico Médico</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Última Aferição da Pressão"
-        value={bloodPressure}
-        onChangeText={setBloodPressure}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Última Aferição de Glicemia"
-        value={glucoseLevel}
-        onChangeText={setGlucoseLevel}
-        keyboardType="numeric"
-      />
-      <Text>O IMC vai calcular o resultado automaticamente usando sua massa/altura</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="IMC"
-        value={bmi}
-        onChangeText={setBmi}
-        keyboardType="numeric"
-      />
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Doenças Passadas e Crônicas"
-        value={medicalHistory}
-        onChangeText={setMedicalHistory}
-        keyboardType="default"
-        multiline
-        textAlignVertical="top"
-      />
-      <Text>Exemplo: estou há duas semanas com dores no estômago</Text>
 
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Doenças Graves em sua Família"
-        value={familyDiseases}
-        onChangeText={setFamilyDiseases}
-        keyboardType="default"
-        multiline
-        textAlignVertical="top"
-      />
-      <Text>Exemplo: minha avó teve câncer de mama e meu pai é diabético.</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Última Aferição da Pressão</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Exemplo: 120/80 mmHg"
+          value={bloodPressure}
+          onChangeText={setBloodPressure}
+          keyboardType="default" // Alterado para teclado padrão
+        />
+      </View>
 
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Alergias"
-        value={allergies}
-        onChangeText={setAllergies}
-        keyboardType="default"
-        multiline
-        textAlignVertical="top"
-      />
-      <Text>Exemplo: sou alérgico a penicilina e poeira.</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Última Aferição de Glicemia</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Exemplo: 90 mg/dL"
+          value={glucoseLevel}
+          onChangeText={setGlucoseLevel}
+          keyboardType="default" // Alterado para teclado padrão
+        />
+      </View>
 
-      <TextInput
-        style={[styles.input, { height: 100 }]}
-        placeholder="Outras Notas"
-        value={otherNotes}
-        onChangeText={setOtherNotes}
-        keyboardType="default"
-        multiline
-        textAlignVertical="top"
-      />
-      <Text>Exemplo: há dois meses comecei a fazer jejum intermitente.</Text>
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>IMC</Text>
+        <Text style={styles.helperText}>O IMC vai calcular o resultado automaticamente usando sua massa/altura</Text>
+        <TextInput
+          style={[styles.input, styles.imcInput]}
+          placeholder="Exemplo: 24.5"
+          value={bmi}
+          editable={false}
+        />
+      </View>
 
-      <SaveButton onPress={handleSave} />
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Doenças Passadas e Crônicas</Text>
+        <Text style={styles.helperText}>Exemplo: estou há duas semanas com dores no estômago</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Descreva suas doenças passadas e crônicas"
+          value={medicalHistory}
+          onChangeText={setMedicalHistory}
+          keyboardType="default"
+          multiline
+          textAlignVertical="top"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Doenças Graves em sua Família</Text>
+        <Text style={styles.helperText}>Exemplo: minha avó teve câncer de mama e meu pai é diabético.</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Descreva as doenças graves em sua família"
+          value={familyDiseases}
+          onChangeText={setFamilyDiseases}
+          keyboardType="default"
+          multiline
+          textAlignVertical="top"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Alergias</Text>
+        <Text style={styles.helperText}>Exemplo: sou alérgico a penicilina e poeira.</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Descreva suas alergias"
+          value={allergies}
+          onChangeText={setAllergies}
+          keyboardType="default"
+          multiline
+          textAlignVertical="top"
+        />
+      </View>
+
+      <View style={styles.inputContainer}>
+        <Text style={styles.label}>Outras Notas</Text>
+        <Text style={styles.helperText}>Exemplo: há dois meses comecei a fazer jejum intermitente.</Text>
+        <TextInput
+          style={[styles.input, styles.multilineInput]}
+          placeholder="Adicione outras notas relevantes"
+          value={otherNotes}
+          onChangeText={setOtherNotes}
+          keyboardType="default"
+          multiline
+          textAlignVertical="top"
+        />
+      </View>
+
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Salvar</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -142,13 +191,49 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  inputContainer: {
+    marginBottom: 20,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+    color: '#333',
+  },
   input: {
     height: 40,
-    borderColor: '#ccc',
+    borderColor: '#199A8E',
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
-    marginBottom: 15,
+    marginBottom: 5,
+    backgroundColor: '#E8F3F1',
+  },
+  multilineInput: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  imcInput: {
+    backgroundColor: '#E8F3F1', // Realce para o campo IMC
+    fontWeight: 'bold', // Deixa o texto do IMC em negrito
+  },
+  helperText: {
+    fontSize: 14,
+    color: '#555',
+    marginBottom: 5,
+  },
+  saveButton: {
+    backgroundColor: '#199A8E',
+    borderRadius: 50,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    marginTop: 30,
+    alignItems: 'center',
+  },
+  saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

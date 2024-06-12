@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, Text, TextInput } from 'react-native';
+import { ScrollView, StyleSheet, Text, TextInput, View, TouchableOpacity, Alert } from 'react-native';
 import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
-import inserirDadosPessoais from '../../../config/Inserir/InserirDados_Pessoais'; // Importe a função inserirDadosPessoais
-import SaveButton from '../Buttons/SaveButton';
+import inserirDadosPessoais from '../../../config/Inserir/InserirDados_Pessoais';
 
 const DadosPessoais = () => {
   const [nome, setNome] = useState('');
@@ -12,6 +11,8 @@ const DadosPessoais = () => {
   const [endereco, setEndereco] = useState('');
   const [telefone, setTelefone] = useState('');
   const [tipoSanguineo, setTipoSanguineo] = useState('');
+  const [peso, setPeso] = useState('');
+  const [altura, setAltura] = useState('');
 
   const userId = firebaseAuth.currentUser?.uid;
 
@@ -28,6 +29,8 @@ const DadosPessoais = () => {
           setEndereco(data.endereco || '');
           setTelefone(data.telefone || '');
           setTipoSanguineo(data.tipoSanguineo || '');
+          setPeso(data.peso || '');
+          setAltura(data.altura || '');
         }
       } catch (error) {
         console.error('Erro ao buscar dados pessoais:', error);
@@ -48,13 +51,16 @@ const DadosPessoais = () => {
       endereco,
       telefone,
       tipoSanguineo,
+      peso,
+      altura,
     };
 
     try {
-      await inserirDadosPessoais(userId, dadosPessoais); // Chame a função inserirDadosPessoais com os dados do usuário
-      console.log('Dados pessoais adicionados com sucesso');
+      await inserirDadosPessoais(userId, dadosPessoais);
+      Alert.alert('Sucesso', 'Dados pessoais adicionados com sucesso');
     } catch (error) {
       console.error('Erro ao adicionar dados pessoais:', error);
+      Alert.alert('Erro', 'Não foi possível adicionar os dados pessoais');
     }
   };
 
@@ -67,13 +73,6 @@ const DadosPessoais = () => {
         value={nome}
         onChangeText={setNome}
         keyboardType="default"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
@@ -110,8 +109,24 @@ const DadosPessoais = () => {
         onChangeText={setTipoSanguineo}
         keyboardType="default"
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Peso (kg)"
+        value={peso}
+        onChangeText={setPeso}
+        keyboardType="numeric"
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Altura (m)"
+        value={altura}
+        onChangeText={setAltura}
+        keyboardType="numeric"
+      />
 
-      <SaveButton onPress={handleSave} />
+      <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <Text style={styles.saveButtonText}>Salvar</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 };
@@ -119,20 +134,35 @@ const DadosPessoais = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#199A8E',
+    textAlign: 'center',
   },
   input: {
-    height: 40,
-    borderColor: '#ccc',
+    height: 50,
+    borderColor: '#199A8E',
     borderWidth: 1,
-    borderRadius: 5,
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    marginBottom: 20,
+    backgroundColor: '#E8F3F1',
+  },
+  saveButton: {
+    backgroundColor: '#199A8E',
+    borderRadius: 10,
+    paddingVertical: 15,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: 'bold',
   },
 });
 

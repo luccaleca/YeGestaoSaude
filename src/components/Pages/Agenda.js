@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View, ScrollView, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { firebaseAuth, firebaseFirestore } from '../../../config/firebaseConfig';
-import { Bell, Plus } from '../../icons/Icons';
+import { Plus } from '../../icons/Icons';
 import AgendamentoCard from '../Agendamento/AgendamentoCard';
 import SideBar from '../Bars/SideBar';
 import CategoriaDeAgendamento from '../Agendamento/CategoriaDeAgendamento';
@@ -66,7 +66,6 @@ const Agenda = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.iconsContainer}>
-          <Bell style={styles.icon} />
           <TouchableOpacity style={styles.plusIcon} onPress={handlePlusPress}>
             <Plus style={styles.icon} />
           </TouchableOpacity>
